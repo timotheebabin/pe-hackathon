@@ -21,15 +21,16 @@ def est_position (lettre, piece, case, sous_matrice):
 
 def vecteur(lettre, s_m, case, carte): #s_m pour sous-matrice
     n, m = carte.shape
-    indices = list(carte.resize((1,n*m)))
+    carte2 = carte.copy()
+    indices = carte2.resize((1,n*m)).tolist()
     i, j =  case
     a, b = s_m.shape 
     M = carte[i:i+a:, :j:j+b]  #Sous matrice correspondnat dans le tableau
     P = (s_m-M)/2 #Position de la pièce (1) sans obstacles dans la sous matrice correspondante
-    L1 = [0]*(i-1)*j #0 au dessus de la sm
-    L2 = [0]*(n-(i+a)) #0 en dessous
+    L1 = [0]*(i-1)*m #0 au dessus de la sm
+    L2 = [0]*(n-(i+a))*m #0 en dessous
     for k in range(b):
-        L1 = L1 + [0]*(j-1) + list(s_m[:, k:k+1:]) + [0]*(m-(j+b))
+        L1 = L1 + [0]*(j-1) + s_m[:, k:k+1:].tolist() + [0]*(m-(j+b))
     Lpos = L1 + L2 #Liste position de taille n*m (avec obstacles)
     for k in range (n*m) :
         if indices[k] == 1 :
@@ -39,13 +40,14 @@ def vecteur(lettre, s_m, case, carte): #s_m pour sous-matrice
 def test_toutes_positions (lettre, piece, carte, resultat):
     ens_sous_matrices=sous_matrices(carte, piece.shape).copy()
     print(ens_sous_matrices)
-    for i in range(len(ens_sous_matrices[0])):
-        for j in range(len(ens_sous_matrices[1])):
+    for i in range(ens_sous_matrices.shape[0]):
+        for j in range(ens_sous_matrices.shape[1])):
             resultat.append(vecteur(est_position (lettre,piece, (i,j), ens_sous_matrices[i,j])))
 
 
-# essai test_toutes_positions("f", np.array([[1,0],[1,0]]), np.array([[1,0,1],[0,0,1],[1,0,1],[0,1,1]]),[])
+# essai test_toutes_positions("F", np.array([[1,0],[1,0]]), np.array([[1,0,1],[0,0,1],[1,0,1],[0,1,1]]),[])
 # -
+def tableau final :
 
 
 

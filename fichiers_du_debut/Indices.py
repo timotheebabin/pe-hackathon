@@ -32,3 +32,16 @@ def num_carte(carte):
             A = A + np.array(modif)
     A.resize(n,m)
     return A
+
+
+# -
+
+L = [1,0,1,0,0,0,1,0,1,0]
+carte = np.array([L for i in range(10)])
+carte
+
+n,m = carte.shape
+indices = carte.tolist()[0]
+indices
+
+carte
