@@ -21,12 +21,10 @@ import matplotlib.pyplot as plt
 
 
 # %%
-def vecteur(piece, pos, carte):
+def vecteur(lettre, s_m, case, carte): #s_m pour sous-matrice
     n, m = carte.shape
     indices = list(carte.resize((1,n*m)))
-    L = [piece] #nom de la pièce
-    i, j = pos[0][0], pos[0][1]
-    s_m = pos[1]
+    i, j =  case
     a, b = s_m.shape 
     M = carte[i:i+a:, :j:j+b]  #Sous matrice correspondnat dans le tableau
     P = (s_m-M)/2 #Position de la pièce (1) sans obstacles dans la sous matrice correspondante
@@ -38,4 +36,4 @@ def vecteur(piece, pos, carte):
     for k in range (n*m) :
         if indices[k] == 1 :
                 Lpos = Lpos[:k] + Lpos[k+1:]
-    return L+Lpos #Lpos a été nettoyée : c'est une liste de taille 60     
+    return num_lettres[lettre]+Lpos #Lpos a été nettoyée : c'est une liste de taille 60  
