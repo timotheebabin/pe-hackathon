@@ -1,17 +1,26 @@
 ---
 jupyter:
   jupytext:
+    notebook_metadata_filter: language_info
     text_representation:
       extension: .md
       format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.16.4
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
     name: python3
   language_info:
+    codemirror_mode:
+      name: ipython
+      version: 3
+    file_extension: .py
+    mimetype: text/x-python
     name: python
     nbconvert_exporter: python
     pygments_lexer: ipython3
+    version: 3.12.4
 ---
 
 Licence CC BY-NC-ND, Thierry Parmentelat   -  (images courtesy of wikipedia)
