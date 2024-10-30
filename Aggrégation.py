@@ -16,6 +16,13 @@
 # %%
 import numpy as np
 import xcover as co
+import matplotlib.pyplot as plt
+
+# %%
+BOARD_8_8 = np.zeros((8, 8), dtype='uint64')
+BOARD_8_8[3:5, 3:5] = 1
+carte0 = BOARD_8_8
+print(carte0)
 
 # %%
 raw_shapes = {
@@ -130,7 +137,7 @@ def vecteur(lettre, s_m, case, carte): #s_m pour sous-matrice
 
 
 # %%
-len(vecteur("F", 2*raw_shapes["F"], (0,1), carte))
+len(vecteur("F", 2*raw_shapes["F"], (0,1), carte0))
 
 
 # %%
@@ -143,31 +150,118 @@ def test_toutes_positions (lettre, piece, carte, resultat):
             if np.any(est_pos>2) :
                 pass
             else :
-                resultat.append(vecteur(lettre, est_pos, (i,j), carte))
+                resultat = np.concatenate((resultat,np.array([vecteur(lettre, est_pos, (i,j), carte)])),axis=0)
+    return resultat
+                
 
 
 # %%
 def tableau_final(carte):
-    resultat=[]
+    resultat=np.zeros(shape=(1,72),dtype='uint8')
     for lettre in raw_shapes.keys() :
         rotsym=rot_sym(lettre)
         for forme in rotsym :
-            test_toutes_positions(lettre,forme,carte,resultat)
-    print(resultat)
-    return np.concatenate(resultat,axis=0)
+            resultat = test_toutes_positions(lettre,forme,carte,resultat)
+    return resultat
 
 
 # %%
-L = [1,0,0,0,0,1,0,1,0,0,0,1,0,0]
-carte = np.array([L for i in range(6)])
-carte
+tableau_final(carte0)
 
 # %%
-tableau_final(carte)
+solutions = list(co.covers_bool(tableau_final(carte0)))
+print(solutions)
+
 
 # %%
-co.covers_bool(tableau_final(carte))
+def indice(i, carte):
+    n,m = carte.shape
+    return i//m, i%m
+
+def num_carte(carte):
+    n,m = carte.shape
+    N = n*m
+    A = np.arange(1,(N+1))
+    for k in range(N) :
+        i,j = indice(k,carte)
+        if carte[i,j] == 1 :
+            A[k] = 0
+            modif = [0]*(k+1) + [-1]*(N-k-1) #On retire 1 à tous les suivants car l'emplacement i,j est un obstacle
+            A = A + np.array(modif)
+    A.resize(n,m)
+    return A
+
+print(num_carte(carte0))
 
 # %%
+tab_fin = tableau_final(carte0)
+
+def afficher_solu(solu):
+    resultat = carte.copy()
+    dicoordonnee={}
+    dicoindice={}
+
+    #cette fonction sert à remplir les dictionnaires qui donnent les indices en fonctions des coord. et réciproquement
+    def dicoord(tab):
+        t_n,t_m=np.shape(tab)
+        for i in range(t_n):
+            for j in range(t_m):
+                c = tab[i][j]
+                if c != 0 :
+                    dicoordonnee[(i,j)]=c
+                    dicoindice[c]=(i,j)
+
+    dicoord(num_carte(carte0))
+    r_n,r_m=np.shape(resultat)
+    
+    for k in range(len(solu)):
+        vect=tab_fin[solu[k]]
+        for j in range(0,12):
+            if vect[j]==1:
+                let_ind=j
+                break
+        for i in range(12,72):
+            if vect[i]==1:
+                resultat[dicoindice[i-11]]=let_ind+2
+    return(resultat)
+
+
+# %%
+image_solu_chiffres=afficher_solu(solutions[0])
+print(image_solu_chiffres)
+
+# %%
+dicouleur={1:[255,255,255],
+           2:[255,0,0],
+           3:[148,0,211],
+           4:[0,0,255],
+           5:[255,255,0],
+           6:[255,0,255],
+           7:[0,255,255],
+           8:[80,80,80],
+           9:[100,0,255],
+           10:[255,125,0],
+           11:[0,255,180],
+           12:[125,255,0],
+           13:[255,0,100],
+           14:[0,125,255]}
+
+def afficouleur(tab):
+    t_n,t_m=np.shape(tab)
+    tabl=np.zeros(shape=(t_n,t_m,3),dtype='uint64')
+    for i in range(t_n):
+        for j in range(t_m):
+            tabl[i][j]=dicouleur[tab[i][j]]
+    plt.imshow(tabl)
+
+
+# %%
+afficouleur(image_solu_chiffres)
+
+# %%
+afficouleur(afficher_solu(solutions[1])) #les solutions sont comptées plusieurs fois
+
+# %%
+afficouleur(afficher_solu(solutions[345]))
 
 # %%

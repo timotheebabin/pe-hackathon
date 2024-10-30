@@ -29,3 +29,11 @@ print(list(solution))
 # %%
 solution = cobo(np.array([[1,0,1,0],[0,1,0,1],[1,1,1,1]]))
 print(list(solution))
+
+# %%
+a=np.zeros(shape=(2,4))
+b=np.array([[2,3,4,5]])
+a=np.concatenate((a,b),axis=0)
+print(a)
+
+# %%
