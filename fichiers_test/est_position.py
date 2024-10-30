@@ -41,8 +41,12 @@ def test_toutes_positions (lettre, piece, carte, resultat):
     print(ens_sous_matrices)
     for i in range(len(ens_sous_matrices[0])):
         for j in range(len(ens_sous_matrices[1])):
+<<<<<<< HEAD
+            resultat.append(vecteur (lettre,piece, (i,j), ens_sous_matrices[i,j]))
+=======
             resultat.append(vecteur(est_position (lettre,piece, (i,j), ens_sous_matrices[i,j])))
 
+>>>>>>> 96bf0716a88784e7e3b709080d94bf6c31e57725
 
 # essai test_toutes_positions("f", np.array([[1,0],[1,0]]), np.array([[1,0,1],[0,0,1],[1,0,1],[0,1,1]]),[])
 # -
